@@ -53,6 +53,7 @@ set(ORDER_LIST
     "dynamic_uniform_buffers"
     "texture_loading"
     "hdr"
+    "materialx_loading"
     "instancing"
     "compute_nbody"
     "terrain_tessellation"
@@ -104,6 +105,7 @@ set(ORDER_LIST
 	"hpp_dynamic_uniform_buffers"
 	"hpp_texture_loading"
 	"hpp_hdr"
+    "hpp_materialx_loading"
 	"hpp_instancing")
 
 # Orders the sample ids by the order list above
