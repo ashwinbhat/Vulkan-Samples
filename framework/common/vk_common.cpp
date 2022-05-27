@@ -21,6 +21,7 @@
 #include <spdlog/fmt/fmt.h>
 
 #include "glsl_compiler.h"
+#include "materialx_helper.h"
 #include "platform/filesystem.h"
 
 std::ostream &operator<<(std::ostream &os, const VkResult result)
@@ -346,6 +347,41 @@ int32_t get_bits_per_pixel(VkFormat format)
 		default:
 			return -1;
 	}
+}
+
+VkShaderModule load_materialx_shader(const std::string& filename, VkDevice device, VkShaderStageFlagBits stage)
+{
+
+	vkb::load_document();
+
+	vkb::GLSLCompiler glsl_compiler;
+
+	auto buffer = vkb::fs::read_shader_binary(filename);
+
+	std::string file_ext = filename;
+
+	// Extract extension name from the glsl shader file
+	file_ext = file_ext.substr(file_ext.find_last_of(".") + 1);
+
+	std::vector<uint32_t> spirv;
+	std::string           info_log;
+
+	// Compile the GLSL source
+	if (!glsl_compiler.compile_to_spirv(vkb::find_shader_stage(file_ext), buffer, "main", {}, spirv, info_log))
+	{
+		LOGE("Failed to compile shader, Error: {}", info_log.c_str());
+		return VK_NULL_HANDLE;
+	}
+
+	VkShaderModule           shader_module;
+	VkShaderModuleCreateInfo module_create_info{};
+	module_create_info.sType    = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	module_create_info.codeSize = spirv.size() * sizeof(uint32_t);
+	module_create_info.pCode    = spirv.data();
+
+	VK_CHECK(vkCreateShaderModule(device, &module_create_info, NULL, &shader_module));
+
+	return shader_module;
 }
 
 VkShaderModule load_shader(const std::string &filename, VkDevice device, VkShaderStageFlagBits stage)

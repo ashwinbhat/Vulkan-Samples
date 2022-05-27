@@ -70,6 +70,11 @@ inline bool is_depth_stencil_format(vk::Format format)
 	return vkb::is_depth_stencil_format(static_cast<VkFormat>(format));
 }
 
+inline vk::ShaderModule load_materialx_shader(const std::string &filename, vk::Device device, vk::ShaderStageFlagBits stage)
+{
+	return vkb::load_materialx_shader(filename, device, static_cast<VkShaderStageFlagBits>(stage));
+}
+
 inline vk::ShaderModule load_shader(const std::string &filename, vk::Device device, vk::ShaderStageFlagBits stage)
 {
 	return vkb::load_shader(filename, device, static_cast<VkShaderStageFlagBits>(stage));

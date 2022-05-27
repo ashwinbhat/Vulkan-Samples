@@ -404,6 +404,13 @@ void HPPApiVulkanSample::create_pipeline_cache()
 	pipeline_cache = get_device().get_handle().createPipelineCache({});
 }
 
+vk::PipelineShaderStageCreateInfo HPPApiVulkanSample::load_materialx_shader(const std::string &file, vk::ShaderStageFlagBits stage)
+{
+	shader_modules.push_back(vkb::common::load_materialx_shader(file.c_str(), get_device().get_handle(), stage));
+	assert(shader_modules.back());
+	return vk::PipelineShaderStageCreateInfo({}, stage, shader_modules.back(), "main");
+}
+
 vk::PipelineShaderStageCreateInfo HPPApiVulkanSample::load_shader(const std::string &file, vk::ShaderStageFlagBits stage)
 {
 	shader_modules.push_back(vkb::common::load_shader(file.c_str(), get_device().get_handle(), stage));

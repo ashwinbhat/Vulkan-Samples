@@ -274,6 +274,13 @@ class HPPApiVulkanSample : public vkb::HPPVulkanSample
 	void create_pipeline_cache();
 
 	/**
+   * @brief Load a SPIR-V shader from MaterialX
+   * @param file The file location of the shader relative to the shaders folder
+   * @param stage The shader stage
+   */
+	vk::PipelineShaderStageCreateInfo load_materialx_shader(const std::string& file, vk::ShaderStageFlagBits stage);
+
+	/**
    * @brief Load a SPIR-V shader
    * @param file The file location of the shader relative to the shaders folder
    * @param stage The shader stage

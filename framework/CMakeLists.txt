@@ -23,6 +23,7 @@ set(FRAMEWORK_FILES
     # Header Files
     gui.h
     glsl_compiler.h
+    materialx_helper.h
     spirv_reflection.h
     gltf_loader.h
     buffer_pool.h
@@ -47,6 +48,7 @@ set(FRAMEWORK_FILES
     # Source Files
     gui.cpp
     glsl_compiler.cpp
+    materialx_helper.cpp
     spirv_reflection.cpp
     gltf_loader.cpp
     debug_info.cpp
@@ -465,7 +467,18 @@ if(${VKB_WARNINGS_AS_ERRORS})
     endif()
 endif()
 
-target_include_directories(${PROJECT_NAME} PUBLIC $<TARGET_PROPERTY:plugins,INCLUDE_DIRECTORIES> ${CMAKE_CURRENT_SOURCE_DIR})
+
+# TODO fix this
+# MaterialX
+set(MATERIALX_BASE_DIR ${CMAKE_SOURCE_DIR}/third_party/MaterialX/build/installed)
+set(MaterialX_DIR ${MATERIALX_BASE_DIR}/lib/cmake/MaterialX)
+message("MaterialX_DIR ${MaterialX_DIR}")
+find_package(MaterialX REQUIRED)
+message("MATERIALX_STDLIB_DIR ${MATERIALX_STDLIB_DIR}")
+
+target_include_directories(${PROJECT_NAME} PUBLIC $<TARGET_PROPERTY:plugins,INCLUDE_DIRECTORIES> 
+                                                    ${MATERIALX_BASE_DIR}/include
+                                                    ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link third party libraries
 target_link_libraries(${PROJECT_NAME} PUBLIC
@@ -486,7 +499,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     ctpl
     CLI11::CLI11
     apps
-    plugins)
+    plugins
+    MaterialXCore
+    MaterialXFormat)
 
 if(${NEED_LINK_ATOMIC})
     target_link_libraries(${PROJECT_NAME} PUBLIC atomic)

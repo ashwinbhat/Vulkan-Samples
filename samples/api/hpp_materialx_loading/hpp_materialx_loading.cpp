@@ -533,6 +533,9 @@ void HPPMaterialXLoading::setup_descriptor_sets()
 
 void HPPMaterialXLoading::prepare_pipelines()
 {
+
+	load_materialx_shader("hdr/composition.vert", vk::ShaderStageFlagBits::eVertex);
+
 	std::array<vk::PipelineShaderStageCreateInfo, 2> shader_stages{
 	    load_shader("hdr/composition.vert", vk::ShaderStageFlagBits::eVertex),
 	    load_shader("hdr/composition.frag", vk::ShaderStageFlagBits::eFragment)};
